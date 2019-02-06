@@ -23,10 +23,10 @@ test.intersection.p(ventana1, ventana2, nsim, prop = 1, win = NULL,
 }
 \arguments{
   \item{ventana1}{
-A multiple-polygon window with the format \code{\link[spatstat]{owin}} of \pkg{spatstat}. The "focal" species in the case of \code{test.intersection}.
+A multiple-polygon window with the format \code{\link[spatstat]{owin}} of \pkg{spatstat}. The "accessory" species in the case of \code{test.intersection}.
 }
   \item{ventana2}{
-A multiple-polygon window with the format \code{\link[spatstat]{owin}} of \pkg{spatstat}. The species whose polygons will be rotated in the case of \code{test.intersection}.
+A multiple-polygon window with the format \code{\link[spatstat]{owin}} of \pkg{spatstat}. The species whose polygons will be rotated (i.e., the "focal" species) in the case of \code{test.intersection}.
 }
   \item{nsim}{
 Number of simulations for the Monte Carlo test.
@@ -55,7 +55,7 @@ Number of clusters for the parallel implementation.
 }
 \details{
 The summary statistic employed in the test is the overall sum of the overlapping areas of intersecting polygons. To reduce the computing burden, area intersections are only computed for polygon pairs for which the distance between their centoids is smaller than the sum of their largest diameters (weighted by the argument \code{prop}). To avoid edge effects, the test only considers polygons whose centroids are separated from the border of the observation window by a distance larger than their largest diameter.
-In the pairwise tests, the polygons of \code{ventana1} are kept fixed in their original positions (i.e., the focal species) and the polygons of \code{ventana2} are rotated.
+In the pairwise tests, the polygons of \code{ventana1} are kept fixed in their original positions (i.e., the accessory species) and the polygons of \code{ventana2} (i.e., the focal species) are rotated.
 }
 \value{
 Both \code{test.auto.intersection} and \code{test.intersection} return a vector of length \code{nsim}+1, with the sum of observed overlaping areas in the first position and subsequently with the sum of overlapping areas in each the simulated (i.e., randomly rotated) realizations of the null model.
@@ -78,8 +78,8 @@ data(Sesleria)
    pval(Astragalus.test)
    
 # Test overlapping between Astragalus  and Sesleria individuals.
-# Here, Sesleria is the focal species (its individuals are kept fixed during the
-# test) and Astragalus individuals are rotated
+# Here, Sesleria is the accesory species (its individuals are kept fixed during the
+# test) and Astragalus  the focal one (its individuals are rotated)
 # Ideally nsim should be at least 199
    Sesleria.Astragalus.test<- test.intersection(ventana1= Sesleria, 
                                                    ventana2= Astragalus, nsim=19)
@@ -159,4 +159,3 @@ for ( i in 1: length(owins)){
  
 }
 \keyword{ spatial }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line

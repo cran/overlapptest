@@ -1,9 +1,9 @@
-a32533cd18fb43e206469277f499669f *DESCRIPTION
+9d934a5013fc42f7ee438f40407df19a *DESCRIPTION
 6fc485604f583360352e3d32d95fc3f0 *NAMESPACE
 16017bc1858052bdc9bbb5f3b83d4c0a *R/centroidiam.R
 ff49799f83719db126eed3e1b0873a49 *R/check.ventana.R
 98959f5dcc11f923687405b5481a6203 *R/overlapptest-internal.R
-8aeb5af9f3302268b824186b27f9fa85 *R/pval.R
+4f6fcf33428db65af8fbd161aa4d3064 *R/pval.R
 636a0511dab1daa00bb20d6b907fb42d *R/rotawin.R
 a3536088facf180d880809802773c43f *R/test.auto.intersection.R
 d04ceab83a12d9368fe2df00821e06e3 *R/test.auto.intersection.p.R
@@ -18,7 +18,7 @@ ff6d458620afe8c6f0246e2287435e90 *inst/shapes/Androsace.shx
 e6f25a7a65bc456d459142a65bb3d1f0 *man/Astragalus.Rd
 fc3525c6dc2070c905eb5536a564c20f *man/centroidiam.Rd
 d71e49837cbc35ee0c02e5cbc897aab5 *man/check.ventana.Rd
-886279beb4eef6c31a1d6ad843ff8d9c *man/pval.Rd
-61b49adafc171a022c85d88ab48dacee *man/rotawin.Rd
-4d6ce0c842f8f1cc790079d256611828 *man/test.intersection.Rd
+b9d6d9994ebc31510a01b500cdfe35b4 *man/pval.Rd
+4539a7338786259828927a3e1e0afc30 *man/rotawin.Rd
+6810087caa0b2e36dfd2aebc9c5fc0e5 *man/test.intersection.Rd
 1681b0bfb0523cf711adc298243d4bff *vignettes/Readshapefiles.Rnw

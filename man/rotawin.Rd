@@ -27,7 +27,7 @@ Marcelino de la Cruz Rot
 
 \examples{
 data(Astragalus)
-plot(Astragalus, xlim=c(3,5), ylim=c(4,6))
+plot(Astragalus)
 plot(rotawin(Astragalus), add=TRUE, border=2)
 
 }
