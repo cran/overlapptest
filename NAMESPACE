@@ -3,8 +3,13 @@ export("centroidiam", "check.ventana", "pval", "rotawin", "test.auto.intersectio
 "test.auto.intersection.p", "test.intersection.p")
 
 # imports
-import(spatstat)
+
+importFrom("spatstat.geom",  "area.owin", "bdist.points", "centroid.owin", "crossdist", "diameter",  "intersect.owin", "owin", "ppp", "progressreport", "rotate", "spatstat.options")
+
 importFrom("stats", "dist", "median", "runif")
 importFrom("parallel", "makeCluster", "clusterExport", "parSapplyLB", "stopCluster")
 # ToDo: "importFrom" only required functions 
+
+# delete when the dust settlles
+#import(spatstat)
 
