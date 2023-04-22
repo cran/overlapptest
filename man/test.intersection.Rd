@@ -68,6 +68,7 @@ Marcelino de la Cruz Rot
 
 data(Astragalus)
 data(Sesleria)
+
 # Test overlapping between Astragalus individuals
   # Ideally nsim should be at least 199
    Astragalus.test<- test.auto.intersection(Astragalus, nsim=19)
@@ -91,7 +92,10 @@ data(Sesleria)
    pval(Sesleria.Astragalus.test)
    
 \donttest{ 
+
 # Reducing computing burden when making repetitive testing
+ 
+
 # First, put all the polygonal regions in a list, i.e.
  owins<- list(Astragalus, Sesleria)
  
@@ -107,19 +111,21 @@ diams<- list()
 }
 
 # set the number of simulations for each test
-nsim<-199
+# Ideally nsim should be at least 199
+online <- interactive()
+Nsim <- if(online) 19 else 3
 
 # create an array to store the results
-result <- array(NA, dim=c(length(owins),length(owins),nsim+1))
+result <- array(NA, dim=c(length(owins),length(owins),Nsim+1))
 
 t0<-Sys.time()
 for ( i in 1: length(owins)){
    for ( j in 1: length(owins)){
      cat(i,j,"\n")
-       if(j!=i) result[i,j,] <- test.intersection(owins[[i]], owins[[j]], nsim=nsim,
+       if(j!=i) result[i,j,] <- test.intersection(owins[[i]], owins[[j]], nsim=Nsim,
 		centroides1=centroids[[i]], diametros1=diams[[i]],
 		centroides2=centroids[[j]], diametros2=diams[[j]]) else
-		result[i,j,] <-  test.auto.intersection(owins[[i]], nsim=nsim,
+		result[i,j,] <-  test.auto.intersection(owins[[i]], nsim=Nsim,
 		centroides1=centroids[[i]], diametros1=diams[[i]])
    }
 }
@@ -134,16 +140,16 @@ for ( i in 1: length(owins)){
  # Compare with parallelized versions:
   
 # create an array to store the result.ps
-result.p<- array(NA, dim=c(length(owins),length(owins),nsim+1))
+result.p<- array(NA, dim=c(length(owins),length(owins),Nsim+1))
 
 t0<-Sys.time()
 for ( i in 1: length(owins)){
    for ( j in 1: length(owins)){
      cat(i,j,"\n")
-       if(j!=i) result.p[i,j,] <- test.intersection.p(owins[[i]], owins[[j]], nsim=nsim,
+       if(j!=i) result.p[i,j,] <- test.intersection.p(owins[[i]], owins[[j]], nsim=Nsim,
 		centroides1=centroids[[i]], diametros1=diams[[i]],
 		centroides2=centroids[[j]], diametros2=diams[[j]]) else
-		result.p[i,j,] <-  test.auto.intersection.p(owins[[i]], nsim=nsim,
+		result.p[i,j,] <-  test.auto.intersection.p(owins[[i]], nsim=Nsim,
 		centroides1=centroids[[i]], diametros1=diams[[i]])
    }
 }

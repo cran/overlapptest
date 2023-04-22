@@ -47,7 +47,7 @@ files in the package \texttt{spatstat.geom} (Baddeley et al. 2015).
 
 This vignette is part of the documentation included in \pkg{overlapptest} 
 version \texttt{\Sexpr{sversion}}.
-The information applies to \pkg{overlapptest} versions \texttt{1.0-0} and  
+The information applies to \pkg{overlapptest} versions \texttt{1.3-0} and  
 above.
 
 \section{Shapefiles}
@@ -72,10 +72,11 @@ To refer to this collection you will always use the filename with the extension
 \section{Helper packages}
 \label{S:helpers}
 
-We'll use two other packages to handle shapefile data.
-
-The \pkg{rgdal} package contains facilities for reading and writing files in shapefile format. The \pkg{maptools} package is designed specifically for handling file formats for spatial data.
-
+With earlier versions of \pkg{overlapptest} we used packages \pkg{rgdal} and \pkg{maptools}
+to respectively read and manipulate  files with the shapefile format. As these packages will be 
+retired by the end of 2023, from version \texttt{1.3-0} we will use \pkg{spatstat.geom} and 
+\pkg{sf}.
+The \pkg{sf} package contains functions for reading shapefiles.
 The \pkg{spatstat.geom} package contains functions for handling polygons (as 
 \texttt{owin} objects) which allow computing areas, centroids, intersections 
 and rotations.
@@ -86,29 +87,26 @@ To read shapefile data into \R{}, for use with \pkg{overlapptest}, two steps
 must be followed:
 \begin{enumerate}
 \item 
-  using the facilities of \pkg{rgdal} and \pkg{maptools}, read the shapefiles
-  as a Spatial*DataFrame object.
+  using the facilities of \pkg{sf}, read the shapefiles  as a sf object.
 \item
-  convert the Spatial*DataFrame object  into a multi-polygonal owin object
+  convert the sf object  into a multi-polygonal owin object
   supported by \pkg{spatstat.geom}.
 \end{enumerate}
 
-\subsection{Read shapefiles using \pkg{rgdal} and \pkg{maptools}} 
+\subsection{Read shapefiles using \pkg{sf}} 
 
 Here's how to read shapefile data.
 
 \begin{enumerate}
-\item ensure that the package \pkg{rgdal} and \pkg{maptools} is installed. For \pkg{maptools} you will need version 
-\texttt{1.1-1} or later.
+\item ensure that the package \pkg{sf} is installed. 
 \item start R and load the packages: 
 <<>>=
-library(rgdal)
-library(maptools)
+library(sf)
 @ 
 \item read the shapefile into \texttt{R} 
-using \texttt{readOGR}, for example
+using \texttt{st\_read}, for example
 <<eval=FALSE>>=
-x <- readOGR("mydata.shp")
+x <- st_read("mydata.shp")
 @ 
 \item 
 To find out what kind of spatial objects are represented by the dataset,
@@ -117,21 +115,20 @@ inspect its class:
 class(x)
 @ 
 For applications of the \pkg{overlapptest} package, the class should typicaly 
-be a \texttt{SpatialPolygonsDataFrame}.
+be a \texttt{sf}.
 \end{enumerate}
 
 
 For example, to read in the shapefile data supplied in the \pkg{overlapptest} 
 package, we just should set the working directory to the folder where there are 
-the sapefile data and use the \texttt{readOGR()} function of 
-\pkg{rgdal} or   the \texttt{st\_read()} function of \pkg{sf}.
+the sapefile data and use the  \texttt{st\_read()} function of \pkg{sf}.
 <<echo=FALSE>>=
 dire<-getwd()
 @
 
 <<>>=
 setwd(system.file("shapes", package="overlapptest"))
-Androsace <- readOGR("Androsace.shp", verbose=FALSE)
+Androsace <- st_read("Androsace.shp", quiet =TRUE)
 @ 
 <<>>=
 class(Androsace)
@@ -142,11 +139,9 @@ setwd(dire)
 
 \subsection{Convert data to \pkg{spatstat.geom} format}
 
-Both packages \pkg{maptools} and \pkg{spatstat.geom} must be loaded
-in order to convert the data.
+The \pkg{spatstat.geom} must be loaded in order to convert the data.
 
 <<>>=
-library(maptools)
 library(spatstat.geom)
 @ 
 
@@ -165,12 +160,14 @@ There are different ways to convert the dataset to an object in the
 \pkg{spatstat}. For applications of the \pkg{overlapptest}, the most convenient 
 way is combining all the polygonal elements of the same type (ussually present 
 in a unique shapefile) into a single "polygonal region", and convert this to a 
-single object of class \texttt{owin}. To do this, use \verb!as(x, "owin")! or 
-\texttt{as.owin(x)}.  The result is a single window (object of class 
+single object of class \texttt{owin}. To do this, use 
+\texttt{as.owin(x)}, but with the argument \texttt{"check\_polygon"} set to
+\texttt{"FALSE"}, to avoid errors if some polygons are traversed in the wrong direction.
+The result is a single window (object of class 
 \texttt{"owin"})  in the \pkg{spatstat.geom} package. In our example, 
 
 <<>>=
-Androsace<- as(Androsace, "owin")
+Androsace <- as.owin(Androsace, check_polygons=FALSE)
 @ 
 
 \subsection{Checking the reliability of the  \texttt{owin} object} 
@@ -194,35 +191,45 @@ These polygons should be corrected manually before using the other functions in
 the \pkg{overlapptest} package.
 
 <<echo=FALSE>>=
-check.ventana <-
-function(ventana){
+
+check.ventana <- 
+function (ventana) 
+{
     malos1 <- NULL
-    malos2<- NULL
-    for( i in 1:length(ventana$bdry)){
-       test <- try(owin(poly=ventana$bdry[[i]]), silent=TRUE)
-       if(class(test)=="try-error"){
-            malos1<- c(malos1, i) # anota en que subpoligono hay un error
-            # intenta darle la vuelta a las coordenadas a ver si eso lo resuleve
-            test2 <- try( owin(poly=lapply(ventana$bdry[[i]], rev), silent=TRUE))
-              if(class(test2)!="try-error"){
-                   # si al dar la vuelta a las cooredenadas se arregla, grabamos las nuevas coordenadas
-                   ventana$bdry[[i]] <-lapply(ventana$bdry[[i]], rev)
-	        } else malos2<- c(malos2, i)
-	}
-     }
-   attr(ventana, "corrected")  <-malos1
-   attr(ventana, "not.corrected") <- malos2
-   if(!is.null(malos1)) cat( length(malos1), "problematic polygon(s) detected \n \n")
-   if(!is.null(malos1) & is.null(malos2)) cat("all problematic polygons have been repared\n \n")
-   if(!is.null(malos2)) cat(length(malos2), "problematic polygon(s) could not been repared\n \n")
-   return(ventana)
+    malos2 <- NULL
+    for (i in 1:length(ventana$bdry)) {
+        xy <- list(x = ventana$bdry[[i]]$x, y= ventana$bdry[[i]]$y)
+       test <- try(owin(poly=xy), silent=TRUE)
+       if(inherits (test, "try-error")){
+            malos1 <- c(malos1, i)
+            test2 <- try(owin(poly = lapply(xy, rev), silent = TRUE))
+             if(!inherits (test2, "try-error")){
+                ventana$bdry[[i]] <- owin(poly = lapply(xy, rev))$bdry
+            }  else{
+ 	       malos2 <- c(malos2, i)
+		ventana$bdry[[i]]$area <- NULL
+	        ventana$bdry[[i]]$hole <- NULL
+               }
+        }
+    }
+    attr(ventana, "corrected") <- malos1
+    attr(ventana, "not.corrected") <- malos2
+    if (!is.null(malos1)) 
+        cat(length(malos1), "problematic polygon(s) detected \n \n")
+    if (!is.null(malos1) & is.null(malos2)) 
+        cat("all problematic polygons have been repared\n \n")
+    if (!is.null(malos2)) 
+        cat(length(malos2), "problematic polygon(s) could not been repared\n \n")
+    return(ventana)
 }
+
+
 @ 
 
 <<>>=
 Androsace <- check.ventana(Androsace)
 @ 
-In this case the message warns that 57 polygons have been corrected so no 
+In this case the message warns that 1 polygon has been corrected so no 
 manual correction is necessary.  To re-check this, we can examine the  
 attributes of the \texttt{owin} object.
 
