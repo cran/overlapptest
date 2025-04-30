@@ -1,4 +1,4 @@
-aa00392f621619c012b504fb7230b4bc *DESCRIPTION
+66ef8fdf9e79631ad87aec4d2525e500 *DESCRIPTION
 82465173123f95d7a06449c517268bc8 *NAMESPACE
 16017bc1858052bdc9bbb5f3b83d4c0a *R/centroidiam.R
 299b3ff8532f4969b8b5b62ce5c00041 *R/check.ventana.R
@@ -8,12 +8,12 @@ a3536088facf180d880809802773c43f *R/test.auto.intersection.R
 d04ceab83a12d9368fe2df00821e06e3 *R/test.auto.intersection.p.R
 01c1eb6aff8690176b7317a11570c54b *R/test.intersection.R
 169f093bf969ca78f7e53ef8d2083463 *R/test.intersection.p.R
-cf709f1b6eda60a34721b02f0b992b93 *build/vignette.rds
-fb77fa531107673c2759d4447f76fb1b *data/Astragalus.rda
-c67b4b451d2d476248a787b5885a02b7 *data/Sesleria.rda
+b143bc716d37e1a24e57ef385c7bad20 *build/vignette.rds
+f6f0be95d2e549f421bf124d4cdc65fb *data/Astragalus.rda
+a88b09fd80e6d928a3c9329ecb052cc2 *data/Sesleria.rda
 a3752704adc0ba86c31c03409dd2f1bf *inst/doc/Readshapefiles.R
 8c45b4dab0cf997990e8d96990b4a757 *inst/doc/Readshapefiles.Rnw
-48d40f4dd9248c6b90245bc07ebfaa76 *inst/doc/Readshapefiles.pdf
+ecc4d9b78593353ae26fe883d8801767 *inst/doc/Readshapefiles.pdf
 e0ccd3d9be428467b1b9b5bd99bf8a0a *inst/shapes/Androsace.dbf
 1e7ca9f97ceaf7bc81eac6ac258bd84d *inst/shapes/Androsace.shp
 ff6d458620afe8c6f0246e2287435e90 *inst/shapes/Androsace.shx
